@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import hr.olfo.alarmclock.util.Constants
 
 class AlarmClock : Application() {
     var serviceBinder: AlarmService.AlarmBinder? = null
@@ -14,7 +15,7 @@ class AlarmClock : Application() {
         super.onCreate()
 
         val si = Intent(this, AlarmService::class.java).apply {
-            action = "hr.olfo.alarmclock.action.INIT"
+            action = Constants.ActionInit
         }
 
         bindService(si, Connection(this), Context.BIND_ABOVE_CLIENT)

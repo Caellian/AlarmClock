@@ -1,17 +1,28 @@
 package hr.olfo.alarmclock.fragments
 
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import hr.olfo.alarmclock.R
+import android.support.v4.app.DialogFragment
+import android.text.format.DateFormat
+import android.widget.TimePicker
+import hr.olfo.alarmclock.util.Constants
+import java.util.*
 
-import kotlinx.android.synthetic.main.fragment_time_picker.*
+class FragmentTimePicker(): DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
-class FragmentTimePicker: Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.id.fragmentTimePicker, container, false)
-        return super.onCreateView(inflater, container, savedInstanceState)
+    lateinit var listener: TimePickerDialog.OnTimeSetListener
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val c = Calendar.getInstance()
+        val h = arguments?.getInt(Constants.ARGUMENT_HOUR) ?: c.get(Calendar.HOUR_OF_DAY)
+        val m = arguments?.getInt(Constants.ARGUMENT_MINUTE) ?: c.get(Calendar.MINUTE)
+
+        return TimePickerDialog(activity, this, h, m, DateFormat.is24HourFormat(activity))
     }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        listener.onTimeSet(view, hourOfDay, minute)
+    }
+
 }

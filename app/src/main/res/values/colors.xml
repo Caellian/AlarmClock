@@ -5,4 +5,6 @@
     <color name="colorAccentLight">#0496ff</color>
     <color name="colorAccent">#027bce</color>
     <color name="colorAccentDark">#00487c</color>
+
+    <color name="colorCategory">#ff5a595b</color>
 </resources>

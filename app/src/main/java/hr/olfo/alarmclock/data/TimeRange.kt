@@ -1,10 +1,11 @@
 package hr.olfo.alarmclock.data
 
+import hr.olfo.alarmclock.util.Day
 import java.util.*
 
 class TimeRange {
-    var beginTime: Date? = null
-    var endTime: Date? = null
+    var beginDate: Date? = null
+    var endDate: Date? = null
 
     val shifts = mutableListOf<Shift>()
 
@@ -17,14 +18,4 @@ class TimeRange {
     }
 
     data class Time(val hours: Int, val minutes: Int = 0, val seconds: Int = 0)
-
-    enum class Day {
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday,
-        Sunday
-    }
 }
