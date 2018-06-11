@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.google.gson.Gson
 import hr.olfo.alarmclock.util.Constants
 
 class AlarmClock : Application() {
@@ -35,6 +36,8 @@ class AlarmClock : Application() {
     }
 
     companion object {
+        val gson = Gson()
+
         val ServiceListeners = mutableListOf<AlarmService.ServiceListener>()
     }
 }

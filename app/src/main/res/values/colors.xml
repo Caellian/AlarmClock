@@ -6,5 +6,6 @@
     <color name="colorAccent">#027bce</color>
     <color name="colorAccentDark">#00487c</color>
 
-    <color name="colorCategory">#ff5a595b</color>
+    <color name="colorGuiGray">#ff5a595b</color>
+    <color name="colorGuiAccent">#8a898b</color>
 </resources>

@@ -9,7 +9,7 @@ import android.widget.TimePicker
 import hr.olfo.alarmclock.util.Constants
 import java.util.*
 
-class FragmentTimePicker(): DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class FragmentTimePicker: DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     lateinit var listener: TimePickerDialog.OnTimeSetListener
 

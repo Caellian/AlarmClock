@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import hr.olfo.alarmclock.R
 import hr.olfo.alarmclock.data.Alarm
+import hr.olfo.alarmclock.fragments.FragmentAlarmPreview
 import hr.olfo.alarmclock.util.Constants
 import hr.olfo.alarmclock.util.Util
 
@@ -36,27 +37,16 @@ class AlarmPreview : AppCompatActivity() {
 
         alarms.removeAllViewsInLayout()
 
+        val fm = fragmentManager
+        val ft = fm.beginTransaction()
+
         val alarmList = preferences.getStringSet(Constants.AlarmList, mutableSetOf())
         alarmList.forEach {
-            val alarm = AlarmCreate.gson.fromJson<Alarm>(preferences.getString(it, ""), Alarm::class.java)
-            val b = Button(this).also {
-                it.text = "[${Util.getDisplayTime(this, alarm.timeH, alarm.timeM)}] ${alarm.name}"
-            }
-            b.setOnClickListener {
-                val intent = Intent(this, AlarmCreate::class.java)
-                intent.putExtra(Constants.ExtraAlarmID, alarm.id)
-                startActivity(intent)
-            }
-            b.setOnLongClickListener {
-                preferences.edit().also {
-                    it.remove(alarm.id)
-                    it.putStringSet(Constants.AlarmList, alarmList.filter{it != alarm.id}.toSet())
-                }.apply()
-                b.visibility = View.INVISIBLE
-                true
-            }
-            alarms.addView(b)
+            val frag = FragmentAlarmPreview.create(it)
+            ft.add(alarms.id, frag, "preview$it")
         }
+
+        ft.commit()
     }
 
     override fun onResume() {
@@ -71,7 +61,7 @@ class AlarmPreview : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.disable_all -> true
             else -> super.onOptionsItemSelected(item)
         }
     }

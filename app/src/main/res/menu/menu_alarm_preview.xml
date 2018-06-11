@@ -4,12 +4,7 @@
     tools:context="hr.olfo.alarmclock.activities.AlarmPreview">
 
     <item
-        android:id="@+id/app_bar_switch"
+        android:id="@+id/disable_all"
         android:title="@string/disable_all_alarms"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

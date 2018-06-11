@@ -1,6 +1,5 @@
 package hr.olfo.alarmclock.activities
 
-import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,9 +9,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.Window
 import android.widget.SeekBar
-import com.google.gson.Gson
+import hr.olfo.alarmclock.AlarmClock
 import hr.olfo.alarmclock.R
 import hr.olfo.alarmclock.data.Alarm
 import hr.olfo.alarmclock.dialogs.DialogRepeat
@@ -36,9 +34,9 @@ class AlarmCreate : AppCompatActivity() {
         val preferences: SharedPreferences = applicationContext.getSharedPreferences(Constants.PreferencesAlarms, Context.MODE_PRIVATE)
 
         val args: Bundle? = intent.extras
-        val id = args?.getString(Constants.ExtraAlarmID, "") ?: ""
+        val id = args?.getString(Constants.AlarmID, "") ?: ""
         if (id.isNotBlank()) {
-            alarm = gson.fromJson<Alarm>(preferences.getString(id, ""), Alarm::class.java)
+            alarm = AlarmClock.gson.fromJson<Alarm>(preferences.getString(id, ""), Alarm::class.java)
 
             textName.text.clear()
             textName.text.insert(0, alarm.name)
@@ -236,12 +234,13 @@ class AlarmCreate : AppCompatActivity() {
         }
 
         buttonSave.setOnClickListener {
-            val alarmData = gson.toJson(alarm)
+            val alarmData = AlarmClock.gson.toJson(alarm)
             val set = preferences.getStringSet(Constants.AlarmList, mutableSetOf())
             preferences.edit().also {
                 it.putString(alarm.id, alarmData)
                 set.add(alarm.id)
                 it.putStringSet(Constants.AlarmList, set)
+                it.putStringSet(Constants.EnabledAlarmList, set)
             }.apply()
             finish()
         }
@@ -294,9 +293,5 @@ class AlarmCreate : AppCompatActivity() {
 
         alarm.ringtoneUri = uri.toString()
         alarm.ringtoneName = name
-    }
-
-    companion object {
-        val gson = Gson()
     }
 }

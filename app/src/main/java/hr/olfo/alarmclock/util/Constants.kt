@@ -5,8 +5,8 @@ object Constants {
     const val PreferencesAlarms = "hr.olfo.alarmclock:ALARMS"
 
     const val AlarmList = "hr.olfo.alarmclock:ALARM_LIST"
-
-    const val ExtraAlarmID = "hr.olfo.alarmclock:EXTRA_ALARM"
+    const val EnabledAlarmList = "hr.olfo.alarmclock:ENABLED_ALARM_LIST"
+    const val AlarmID = "hr.olfo.alarmclock:ALARM_ID"
 
     const val ActionInit = "hr.olfo.alarmclock:ACTION_INIT"
 
