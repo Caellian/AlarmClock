@@ -4,9 +4,12 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.media.RingtoneManager
 import android.net.Uri
+import hr.olfo.alarmclock.AlarmClock
 
 
 object Util {
+    val ringtones = mutableMapOf<Uri, String>()
+
     fun getDisplayTime(context: Context, h: Int, m: Int): String {
         val displayH: String
         val displayM = String.format("%02d", m)

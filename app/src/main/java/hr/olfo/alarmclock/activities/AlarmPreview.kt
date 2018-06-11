@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import hr.olfo.alarmclock.AlarmClock
 import hr.olfo.alarmclock.R
 import hr.olfo.alarmclock.data.Alarm
 import hr.olfo.alarmclock.fragments.FragmentAlarmPreview
@@ -60,9 +61,29 @@ class AlarmPreview : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.disable_all -> true
-            else -> super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.disable_all -> {
+                val preferences: SharedPreferences = applicationContext.getSharedPreferences(Constants.PreferencesAlarms, Context.MODE_PRIVATE)
+                val alarmList = preferences.getStringSet(Constants.AlarmList, emptySet())
+
+                val alarms = alarmList.mapNotNull { AlarmClock.gson.fromJson(preferences.getString(it, ""), Alarm::class.java) }
+
+                alarms.forEach {alarm ->
+                    alarm.enabled = false
+
+                    val alarmData = AlarmClock.gson.toJson(alarm)
+                    preferences.edit().also {
+                        it.putString(alarm.id, alarmData)
+                    }.apply()
+                }
+
+                refreshAlarmList()
+                AlarmClock.instance.doWithService {
+                    it.refreshAlarms()
+                }
+            }
+            else -> return false
         }
+        return true
     }
 }

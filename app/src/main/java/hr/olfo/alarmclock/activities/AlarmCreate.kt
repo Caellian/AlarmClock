@@ -43,6 +43,8 @@ class AlarmCreate : AppCompatActivity() {
             textName.text.clear()
             textName.text.insert(0, alarm.name)
 
+            labelRingtone.text = alarm.ringtoneName
+
             seekBarVolume.progress = alarm.volume
 
             if (alarm.repeat[Day.Monday] == true &&
@@ -131,7 +133,8 @@ class AlarmCreate : AppCompatActivity() {
             checkBoxSnoozeOnMove.isChecked = alarm.snoozeOnMove
         } else {
             alarm = Alarm()
-            alarm.ringtoneUri = Util.getFirstRingtone(this).toString()
+            alarm.ringtoneUri = Util.ringtones.keys.firstOrNull()?.toString() ?: ""
+            labelRingtone.text = Util.ringtones.values.firstOrNull()?.toString() ?: "NONE"
 
             val c = Calendar.getInstance()
             alarm.timeH = c.get(Calendar.HOUR_OF_DAY)
@@ -169,7 +172,7 @@ class AlarmCreate : AppCompatActivity() {
 
             val ringtone = DialogRingtone()
             val bundle = Bundle()
-            bundle.putString(Constants.ArgumentRingtone, alarm.ringtoneUri.toString())
+            bundle.putString(Constants.ArgumentRingtone, alarm.ringtoneUri)
             ringtone.arguments = bundle
 
             val fm = fragmentManager
@@ -248,11 +251,10 @@ class AlarmCreate : AppCompatActivity() {
                 it.putString(alarm.id, alarmData)
                 set.add(alarm.id)
                 it.putStringSet(Constants.AlarmList, set)
-                it.putStringSet(Constants.EnabledAlarmList, set)
             }.apply()
 
             AlarmClock.instance.doWithService {
-                it.addAlarm(alarm)
+                it.refreshAlarms()
             }
 
             finish()

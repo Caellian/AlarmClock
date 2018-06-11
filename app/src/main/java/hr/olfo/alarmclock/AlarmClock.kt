@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.util.Log
 import com.google.gson.Gson
 import hr.olfo.alarmclock.util.Constants
+import hr.olfo.alarmclock.util.Util
 
 class AlarmClock : Application() {
     var serviceBinder: AlarmService.AlarmBinder? = null
@@ -16,8 +17,7 @@ class AlarmClock : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-
-        Log.i("AC", "Starting app!")
+        Util.ringtones += Util.getRingtones(this)
 
         val si = Intent(this, AlarmService::class.java).apply {
             action = Constants.ActionInit
@@ -32,7 +32,6 @@ class AlarmClock : Application() {
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.i("AC", "Service connected!")
             parent.serviceBinder = service as? AlarmService.AlarmBinder
             parent.serviceBinder?.also { binder ->
                 ServiceListeners.forEach { it(binder) }

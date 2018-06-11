@@ -42,12 +42,12 @@ class FragmentAlarmPreview: Fragment(), PopupMenu.OnMenuItemClickListener {
         checkBoxEnable.setOnClickListener {
             alarm.enabled = checkBoxEnable.isChecked
             val alarmData = AlarmClock.gson.toJson(alarm)
-            val set = preferences?.getStringSet(Constants.EnabledAlarmList, mutableSetOf())
             preferences?.edit()?.also {
                 it.putString(alarm.id, alarmData)
-                set?.add(alarm.id)
-                it.putStringSet(Constants.EnabledAlarmList, set)
             }?.apply()
+            AlarmClock.instance.doWithService {
+                it.refreshAlarms()
+            }
         }
 
         buttonOptions.setOnClickListener {
@@ -69,11 +69,9 @@ class FragmentAlarmPreview: Fragment(), PopupMenu.OnMenuItemClickListener {
         when (item.itemId) {
             R.id.delete -> {
                 val alarmList = preferences?.getStringSet(Constants.AlarmList, mutableSetOf())
-                val enabledAlarmList = preferences?.getStringSet(Constants.EnabledAlarmList, mutableSetOf())
                 preferences?.edit()?.also {
                     it.remove(alarmID)
                     it.putStringSet(Constants.AlarmList, alarmList?.filter{it != alarmID}?.toSet())
-                    it.putStringSet(Constants.EnabledAlarmList, enabledAlarmList?.filter{it != alarmID}?.toSet())
                 }?.apply()
                 view.visibility = View.GONE
 
@@ -88,7 +86,6 @@ class FragmentAlarmPreview: Fragment(), PopupMenu.OnMenuItemClickListener {
                     it.putString(newAlarm.id, alarmData)
                     set?.add(newAlarm.id)
                     it.putStringSet(Constants.AlarmList, set)
-                    it.putStringSet(Constants.EnabledAlarmList, set)
                 }?.apply()
 
                 intent.putExtra(Constants.AlarmID, newAlarm.id)

@@ -11,6 +11,7 @@ class Alarm {
 
     var name: String = ""
     var enabled: Boolean = true
+    var lastTime: String = ""
 
     // TODO: Replace with TimeRange
     var timeH: Int = 0
@@ -58,5 +59,11 @@ class Alarm {
         result.snoozeTime = snoozeTime
         result.snoozeOnMove = snoozeOnMove
         return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        if (other !is Alarm) return false
+        return id == other.id
     }
 }

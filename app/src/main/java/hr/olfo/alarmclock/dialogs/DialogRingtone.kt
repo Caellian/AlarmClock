@@ -33,16 +33,15 @@ class DialogRingtone: DialogFragment(), View.OnClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val ringtones = Util.getRingtones(activity)
-        selected = if (ringtones.keys.contains(Uri.parse(arguments.getString(Constants.ArgumentRingtone)))) {
+        selected = if (Util.ringtones.keys.contains(Uri.parse(arguments.getString(Constants.ArgumentRingtone)))) {
             val res = Uri.parse(arguments.getString(Constants.ArgumentRingtone))
-            selectedName = ringtones[res] ?: "<ERROR>"
+            selectedName = Util.ringtones[res] ?: "<ERROR>"
             res
         } else {
-            ringtones.keys.firstOrNull()
+            Util.ringtones.keys.firstOrNull()
         }
 
-        ringtones.forEach { uri, name ->
+        Util.ringtones.forEach { uri, name ->
             val rb = RadioButton(activity).also {
                 it.text = name
                 it.contentDescription = uri.toString()
