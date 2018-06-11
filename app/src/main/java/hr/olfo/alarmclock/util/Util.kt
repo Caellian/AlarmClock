@@ -8,7 +8,7 @@ import android.net.Uri
 
 object Util {
     fun getDisplayTime(context: Context, h: Int, m: Int): String {
-        var displayH = ""
+        val displayH: String
         val displayM = String.format("%02d", m)
         var suffix = ""
         if (!DateFormat.is24HourFormat(context)) {
@@ -19,9 +19,27 @@ object Util {
                 displayH = h.toString()
                 " AM"
             }
+        } else {
+            displayH = h.toString()
         }
 
         return "$displayH:$displayM$suffix"
+    }
+
+    fun getFirstRingtone(context: Context): Uri? {
+        val rm = RingtoneManager(context)
+        rm.setType(RingtoneManager.TYPE_ALARM)
+
+        val alarmsCursor = rm.cursor
+        val alarmsCount = alarmsCursor.count
+        if (alarmsCount == 0 && !alarmsCursor.moveToFirst()) return null
+
+        alarmsCursor.moveToNext()
+        val currentPosition = alarmsCursor.position
+        val result = rm.getRingtoneUri(currentPosition)
+        alarmsCursor.close()
+
+        return result
     }
 
     fun getRingtones(context: Context): Map<Uri, String> {

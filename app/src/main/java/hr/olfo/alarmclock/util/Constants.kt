@@ -22,4 +22,7 @@ object Constants {
     const val ARGUMENT_SUN = "hr.olfo.alarmclock:ARGUMENT_SUN"
 
     const val ArgumentRingtone = "hr.olfo.alarmclock:ARGUMENT_RINGTONE_URI"
+
+    const val DialogIDRepeat = "hr.olfo.alarmclock:DIALOG_REPEAT"
+    const val DialogIDRingtone = "hr.olfo.alarmclock:DIALOG_RINGTONE"
 }

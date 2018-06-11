@@ -1,6 +1,7 @@
 package hr.olfo.alarmclock.dialogs
 
 import android.app.DialogFragment
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -61,6 +62,11 @@ class DialogRingtone: DialogFragment(), View.OnClickListener {
 
         buttonCancel.setOnClickListener(this)
         buttonOk.setOnClickListener(this)
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        (activity as AlarmCreate).dialogClosed(Constants.DialogIDRingtone)
     }
 
     override fun onClick(v: View?) {

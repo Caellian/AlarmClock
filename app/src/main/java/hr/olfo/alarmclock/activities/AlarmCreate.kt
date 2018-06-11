@@ -1,7 +1,9 @@
 package hr.olfo.alarmclock.activities
 
+import android.app.AlarmManager
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -25,7 +27,7 @@ import hr.olfo.alarmclock.util.Util
 
 class AlarmCreate : AppCompatActivity() {
 
-    var alarm = Alarm()
+    lateinit var alarm: Alarm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,6 +130,9 @@ class AlarmCreate : AppCompatActivity() {
 
             checkBoxSnoozeOnMove.isChecked = alarm.snoozeOnMove
         } else {
+            alarm = Alarm()
+            alarm.ringtoneUri = Util.getFirstRingtone(this).toString()
+
             val c = Calendar.getInstance()
             alarm.timeH = c.get(Calendar.HOUR_OF_DAY)
             alarm.timeM = c.get(Calendar.MINUTE)
@@ -143,6 +148,7 @@ class AlarmCreate : AppCompatActivity() {
         })
 
         buttonRepeat.setOnClickListener {
+            buttonRepeat.isEnabled = false
             val repeat = DialogRepeat()
             val bundle = Bundle()
             bundle.putBoolean(Constants.ARGUMENT_MON, alarm.repeat[Day.Monday] ?: false)
@@ -159,6 +165,8 @@ class AlarmCreate : AppCompatActivity() {
         }
 
         buttonRingtone.setOnClickListener {
+            buttonRingtone.isEnabled = false
+
             val ringtone = DialogRingtone()
             val bundle = Bundle()
             bundle.putString(Constants.ArgumentRingtone, alarm.ringtoneUri.toString())
@@ -242,6 +250,11 @@ class AlarmCreate : AppCompatActivity() {
                 it.putStringSet(Constants.AlarmList, set)
                 it.putStringSet(Constants.EnabledAlarmList, set)
             }.apply()
+
+            AlarmClock.instance.doWithService {
+                it.addAlarm(alarm)
+            }
+
             finish()
         }
     }
@@ -293,5 +306,12 @@ class AlarmCreate : AppCompatActivity() {
 
         alarm.ringtoneUri = uri.toString()
         alarm.ringtoneName = name
+    }
+
+    fun dialogClosed(id: String) {
+        when (id) {
+            Constants.DialogIDRepeat -> buttonRepeat.isEnabled = true
+            Constants.DialogIDRingtone -> buttonRingtone.isEnabled = true
+        }
     }
 }

@@ -1,6 +1,8 @@
 package hr.olfo.alarmclock.data
 
+import hr.olfo.alarmclock.AlarmClock
 import hr.olfo.alarmclock.util.Day
+import hr.olfo.alarmclock.util.Util
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -23,6 +25,21 @@ class Alarm {
 
     var snoozeTime = 0
     var snoozeOnMove = false
+
+    fun activeOnDay(day: Day) = repeat[day]
+
+    fun activeOnDay(day: Int): Boolean {
+        return when (day) {
+            1-> repeat[Day.Sunday] ?: false
+            2-> repeat[Day.Monday] ?: false
+            3-> repeat[Day.Tuesday] ?: false
+            4-> repeat[Day.Wednesday] ?: false
+            5-> repeat[Day.Thursday] ?: false
+            6-> repeat[Day.Friday] ?: false
+            7-> repeat[Day.Saturday] ?: false
+            else -> false
+        }
+    }
 
     fun clone(): Alarm {
         val result = Alarm()

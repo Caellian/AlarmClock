@@ -1,6 +1,7 @@
 package hr.olfo.alarmclock.dialogs
 
 import android.app.DialogFragment
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +60,11 @@ class DialogRepeat: DialogFragment(), View.OnClickListener {
             checkBoxSaturday.isChecked = buttonWeekends.isChecked
             checkBoxSunday.isChecked = buttonWeekends.isChecked
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        (activity as AlarmCreate).dialogClosed(Constants.DialogIDRepeat)
     }
 
     override fun onClick(v: View?) {
